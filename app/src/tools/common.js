@@ -1,22 +1,59 @@
-const w = laya.utils.Browser.width
-const h = laya.utils.Browser.height
+// const h = laya.utils.Browser.width
+// const w = laya.utils.Browser.height
+
+const w=Laya.Browser.clientHeight
+const h=Laya.Browser.clientWidth
 const wl = w>>2
 const wh = w>>1
 const x=200
 const y=200
+const pw = 250>>2
+const ph = 374>>2
 const vh = h>>1
-const texture ="http://d.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=1be47219c1fdfc03e52debbce10faba2/b8389b504fc2d562562d540ae51190ef76c66c34.jpg";
+const picdsd = [
+    "./res/fds.jpg",
+    './res/kuang.jpg'
+]
+const buttonBg = new Map([
+    ['cop','./res/button/btn-compler.png'],
+    ['alwAdd','./res/button/btn-always-add.png'],
+    ['getOut','./res/button/btn-getout.png'],
+    ['showValue','./res/button/btn-show.png'],
+    ['rise','./res/button/btn-rise.png'],
+    ['addRise','./res/button/btn-add-rise.png'],
+    ['godd','./res/bg/godd.png']
+])
+
+// const texture ="./res/bg.jpg";
 const PLAYERSPOSITION_EIGHT = [
-    [wl,h-200],
-    [wl*3,h-200],
-    [w-200,vh+300],
-    [w-200,vh-300],
-    [wl*3,200],
-    [wl,200],
-    [200,vh-300],
-    [200,vh+300],
+    [75*w/1600,145*h/900],
+    [75*w/1600,460*h/900],
+    [470*w/1600,580*h/900],
+    [917*w/1600,580*h/900],
+    [1336*w/1600,460*h/900],
+    [1336*w/1600,145*h/900],
+    [1040*w/1600,40*h/900],
+    [385*w/1600,40*h/900],
 ]
 
+const ACTIONBUTTON = [
+    [25*w/1600,800*h/900,'./res/button/btn-always-add.png'],
+    [210*w/1600,780*h/900,'./res/button/btn-compler.png'],
+    [370*w/1600,780*h/900,'./res/button/btn-getout.png'],
+    [645*w/1600,780*h/900,'./res/button/btn-show.png'],
+    [805*w/1600,780*h/900,'./res/button/btn-add-rise.png'],
+    [970*w/1600,780*h/900,'./res/button/btn-rise.png']
+]
+const POKERPOSITION = [
+    [290*w/1600,330*h/900],
+    [290*w/1600,540*h/900],
+    [500*w/1600,530*h/900],
+    [970*w/1600,530*h/900],
+    [1213*w/1600,460*h/900],
+    [1230*w/1600,330*h/900],
+    [1020*w/1600,300*h/900],
+    [420*w/1600,300*h/900]
+]
 const  randomNumBoth =(Min,Max)=>{
       const Range = Max - Min;
       const Rand = Math.random();
@@ -44,5 +81,5 @@ const getPositions=(psNum)=>{
         return PLAYERSPOSITION_FOUR
     }
 }
-const Adress = "api"
+const Adress = "http://localhost:8080/api"
 const fontColor = "#ececec"
