@@ -6,7 +6,6 @@ var HttpRequest = Laya.HttpRequest;
 var Browser     = Laya.Browser;
 var WebGL       = Laya.WebGL;
 //初始化引擎
-alert(Laya.Browser.clientHeight)
 Laya.init(Laya.Browser.clientHeight,Laya.Browser.clientWidth);
 Laya.stage.alignV = Stage.ALIGN_MIDDLE;
 Laya.stage.alignH = Stage.ALIGN_CENTER;
