@@ -54,6 +54,67 @@ GameMain.draw.action.event.b3=()=>{
     GameMain.draw.touzhu(obj)
     console.log(1)
 }
+GameMain.draw.action.event.b4=()=>{
+    let str = `
+        <tr style="border-top:1px solid #d8d8d8">
+            <td style="width:150px;text-align: center;padding: 5px;">
+                <img src="${picdsd[0]}" style="width:50px;height:50px"  alt="上海鲜花港 - 郁金香" />
+                <div style="width:50px;color：#fff">高伟</div>
+            </td>
+           
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(1)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(5)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(7)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;color:#fff">+10</td>
+        </tr>   
+    `
+    let stred = ''
+    for(let i=0;i<8;i++){
+        stred+=str
+    }
+    var d = dialog({
+        width: '100%',
+        title: '游戏结果',
+        content: `
+        <div style="background:#131111;height:300px;overflow-y :scroll;color:#fff"> 
+        <table border="0" cellspacing="0">
+        <tr style="background:#d8d8d8">
+            <th style="width:150px;text-align: center;">玩家</th>
+            <th style="width:150px;text-align: center;" colspan=3>牌值</th>
+            <th style="width:150px;text-align: center;">输赢</th>
+        </tr>
+        ${stred}
+        </table>
+        </div>
+        `
+    });
+    d.show();
+    // const temp =GameMain.draw.poen
+    // const bg = temp.createBg(picdsd[1])
+    // bg.size(w*.8,h*.9)
+    // const  panel = new Laya.Panel();
+    // panel.width=w;
+    // panel.height=h;
+    // // panel.pos(0,0)
+    // panel.align='center'
+    // panel.addChild(bg)
+    // panel.addChild(list)
+    // // d.showModal();
+    
+
+    // panel.pos(w*.1,h*.05);
+    // Laya.stage.addChild(panel);
+    // const List = Laya.List,
+	// 	Handler = Laya.Handler;
+	// let list = new List();
+
+}
 
 GameMain.view = ()=>{
     let bg = new Laya.Image();
@@ -72,7 +133,8 @@ GameMain.view = ()=>{
     let events =[
         GameMain.draw.action.event.b1,
         GameMain.draw.action.event.b2,
-        GameMain.draw.action.event.b3
+        GameMain.draw.action.event.b3,
+        GameMain.draw.action.event.b4
     ]
     buton.map((item,index)=>{
         console.log(index)

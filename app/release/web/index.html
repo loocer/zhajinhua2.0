@@ -14,6 +14,25 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<meta http-equiv='expires' content='0' />
 	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<style>
+		.ui-dialog{
+			transform: rotate(90deg)!important;
+			transform:translateX(20%);
+			background:#131111;
+		}
+		.ui-popup-modal .ui-dialog{
+			background:#131111;
+		}
+	</style>
+	<script type="text/javascript">
+    	
+   		document.addEventListener('plusready', function(){
+   			plus.screen.lockOrientation('landscape-primary');
+   			//console.log("所有plus api都应该在此事件发生后调用，否则会出现plus is undefined。"
+   			
+   		});
+   		
+    </script>
 </head>
 <body>
 	<!--以下引用了常用类库，如果不使用，可以删除-->
