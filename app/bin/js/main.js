@@ -15,7 +15,8 @@ var GameMain = {
         },
     },
     positions:{
-        pokerPositions:[]
+        pokerPositions:[],
+        chipPositions:[]
     },
     // paics:dif,
     picNum:0
@@ -44,10 +45,83 @@ GameMain.draw.action.event.b1=()=>{
     console.log(1)
 }
 GameMain.draw.action.event.b2=()=>{
-    let obj=GameMain.players.get('regregr0')
+    let obj=GameMain.players.get('regregr2')
     GameMain.draw.action.kanpai(obj)
     console.log(1)
 }
+GameMain.draw.action.event.b3=()=>{
+    let obj=GameMain.players.get('regregr6')
+    GameMain.draw.touzhu(obj)
+    console.log(1)
+}
+GameMain.draw.action.event.b5=()=>{
+    let obj=GameMain.players.get('regregr3')
+    GameMain.draw.action.qipai(obj)
+    console.log(1)
+}
+
+GameMain.draw.action.event.b4=()=>{
+    let str = `
+        <tr style="border-top:1px solid #d8d8d8">
+            <td style="width:150px;text-align: center;padding: 5px;">
+                <img src="${picdsd[0]}" style="width:50px;height:50px"  alt="上海鲜花港 - 郁金香" />
+                <div style="width:50px;color：#fff">高伟</div>
+            </td>
+           
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(1)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(5)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;">
+                <img src="${GameMain.pokerImg.get(7)}" style="width:40px;height:60px"  alt="上海鲜花港 - 郁金香" />
+            </td>
+            <td style="width:150px;text-align: center;color:#fff">+10</td>
+        </tr>   
+    `
+    let stred = ''
+    for(let i=0;i<8;i++){
+        stred+=str
+    }
+    var d = dialog({
+        width: '100%',
+        title: '游戏结果',
+        content: `
+        <div style="background:#131111;height:300px;overflow-y :scroll;color:#fff"> 
+        <table border="0" cellspacing="0">
+        <tr style="background:#d8d8d8">
+            <th style="width:150px;text-align: center;">玩家</th>
+            <th style="width:150px;text-align: center;" colspan=3>牌值</th>
+            <th style="width:150px;text-align: center;">输赢</th>
+        </tr>
+        ${stred}
+        </table>
+        </div>
+        `
+    });
+    d.show();
+    // const temp =GameMain.draw.poen
+    // const bg = temp.createBg(picdsd[1])
+    // bg.size(w*.8,h*.9)
+    // const  panel = new Laya.Panel();
+    // panel.width=w;
+    // panel.height=h;
+    // // panel.pos(0,0)
+    // panel.align='center'
+    // panel.addChild(bg)
+    // panel.addChild(list)
+    // // d.showModal();
+    
+
+    // panel.pos(w*.1,h*.05);
+    // Laya.stage.addChild(panel);
+    // const List = Laya.List,
+	// 	Handler = Laya.Handler;
+	// let list = new List();
+
+}
+
 GameMain.view = ()=>{
     let bg = new Laya.Image();
     bg.skin = "res/bg/groundBg.png";
@@ -64,14 +138,45 @@ GameMain.view = ()=>{
     }
     let events =[
         GameMain.draw.action.event.b1,
-        GameMain.draw.action.event.b2
+        GameMain.draw.action.event.b2,
+        GameMain.draw.action.event.b3,
+        GameMain.draw.action.event.b4,
+        GameMain.draw.action.event.b5,
+        GameMain.draw.action.event.b5,
+        GameMain.draw.action.event.b5,
     ]
     buton.map((item,index)=>{
         console.log(index)
         GameMain.draw.action.createTool(item[2],events[index],item)
     })
     GameMain.draw.action.fapai()
+    GameMain.draw.roomInfo()
 }
+GameMain.draw.action.qipai = (player)=>{
+    // if(player.id==GameMain.myPlayer.id){
+    //     player.pokers_ac.map((item)=>{
+    //         Laya.stage.removeChild(item)
+    //     })
+    // }
+    player.pokers_ac.map((item)=>{
+        Laya.stage.removeChild(item)
+    })
+}
+GameMain.draw.roomInfo=()=>{
+    const label = new Laya.Label();
+    label.font = "Microsoft YaHei";
+    label.text = '房间号：908098';
+    label.align='center'
+    label.width=70
+    label.id = 'rer'
+    label.pos(10,10)
+    label.fontSize = 10;
+    label.color = "#fff";
+    label.stroke = 0.11;
+    label.strokeColor = "#0008ff";
+    Laya.stage.addChild(label);
+}
+
 GameMain.draw.action.fapai = ()=>{
     const plers = GameMain.players
     const ps = GameMain.players.values()
@@ -92,22 +197,6 @@ GameMain.draw.action.fapai = ()=>{
                 acs:acSprite
             });
         })
-        // for(let value of ps){
-        //     const acSprite = new Laya.Sprite();
-        //     value.pokers_ac.push(acSprite)
-        //     acSprite.x = wh - pw/2
-        //     acSprite.y = vh - ph/2
-        //     const texture = Laya.loader.getRes(buttonBg.get('godd'));
-        //     acSprite.graphics.drawTexture(texture);        
-        //     acSprite.scale(.2,.2)
-        //     acSprite.pos( wh - pw/2,vh - ph/2);
-        //     Laya.stage.addChild(acSprite);
-        //     acplays.push({
-        //         id:value.id,
-        //         acs:acSprite
-        //     });
-        //     console.log(q)
-        // }
     }
     for(let i in acplays){
         const my = plers.get(acplays[i].id).position[1]
@@ -123,15 +212,15 @@ GameMain.draw.showValueGraphicsImg = function(){
     const player = GameMain.myPlayer
     const my = player.pokers_ac
     console.log(my);
-    const x = player.position[0] - 150;
+    const x = player.position[0] - 20;
     GameMain.positions.showPokerPositions = []
     for(let i in my){
         my[i].graphics.clear();
         const texture = Laya.loader.getRes(GameMain.myPlayerPokerUrl[i]);
         my[i].graphics.drawTexture(texture);
-        my[i].scale(.5,.5);
+        my[i].scale(.30,.30);
         my[i].size(texture.width, texture.height);
-        Laya.Tween.to(my[i],{x:x + 150*i,rotation:180},300,Laya.Ease.backOut,null,i*100);
+        Laya.Tween.to(my[i],{x:x + 40*i,rotation:180},300,Laya.Ease.backOut,null,i*100);
         GameMain.positions.showPokerPositions.push({x:x + 150*i,y:my[i].y})
     } 
     const tempArray = []
@@ -146,6 +235,7 @@ GameMain.draw.action.kanpai = (player)=>{
     // if(player.id ==User.id){
     let fd = player
     if(player.id==GameMain.myPlayer.id){
+        console.log(GameMain.myPlayer.id)
         GameMain.myPlayerPokerUrl = []
         const values = player.pokerValue
         for(let v in values){
@@ -182,9 +272,9 @@ GameMain.draw.action.kanpai = (player)=>{
 GameMain.draw.poen.createAvadar = (texture)=>{
     console.log(texture)
     let img = new imgObj(texture);
-    img.width=50
+    img.width=30
     img.pos(10,15)
-    img.height=50
+    img.height=30
     return img
 }
 
@@ -209,7 +299,7 @@ GameMain.draw.poen.createMoney = (money)=>{
     label.align='left'
     label.width=60
     label.id = 'rer'
-    label.pos(25,70)
+    label.pos(25,50)
     label.fontSize = 10;
     label.color = "#fff";
     label.stroke = 0.11;
@@ -219,7 +309,7 @@ GameMain.draw.poen.createMoney = (money)=>{
 GameMain.draw.poen.createImcon= (texture)=>{
     let imcon = new imgObj(texture);
     imcon.width=10
-    imcon.pos(10,70)
+    imcon.pos(10,50)
     imcon.height=10
     return imcon
 }
@@ -253,8 +343,8 @@ GameMain.draw.base.onePeople=(position)=>{
     let money = temp.createMoney(100)
     let imcon = temp.createImcon(picdsd[0])
     const  panel = new Laya.Panel();
-    panel.width=70;
-    panel.height=85;
+    panel.width=60;
+    panel.height=60;
     panel.pos(position[0],position[1])
     panel.align='center'
     panel.addChild(bg)
@@ -264,11 +354,29 @@ GameMain.draw.base.onePeople=(position)=>{
     panel.addChild(imcon)
     Laya.stage.addChild(panel)
 }
+GameMain.draw.touzhu = function(ps){
+    const obj = {x:ps.peopelp[0],y:ps.peopelp[1]}
+    const pff = new Laya.Sprite();
+    pff.x = obj.x
+    pff.y = obj.y
+    var fdf = Laya.loader.getRes(buttonBg.get('rise'));
+    pff.graphics.drawTexture(fdf);    
+    pff.scale(.9,.9)
+    pff.size(fdf.width, fdf.height); 
+    pff.pos( obj.x,obj.y);
+    Laya.stage.addChild(pff);
+    const ex = wh - pw/2+randomNumBoth(-30,60)
+    const ey = vh - randomNumBoth(-30,60)
+    GameMain.positions.chipPositions.push({x:ex,y:ey})
+    Laya.Tween.to(pff,
+            {x:ex,y:ey}
+            ,1000,Laya.Ease.backOut,null,10);
+}
 GameMain.tool.initImg = function(){
     let index = 1
     for(let i=1;i<14;i++){
         for(let f=1;f<5;f++){
-            GameMain.pokerImg.set(index,`./res/value/${f}/${i}.jpg`)
+            GameMain.pokerImg.set(index,`./res/value/${f}/${i}.png`)
             index++
         }
     }
@@ -283,6 +391,7 @@ GameMain.tool.forPlayer = function(msg){
     //     }
     // }
     const positions = POKERPOSITION
+    const peopelps =  PLAYERSPOSITION_EIGHT
     // pokers.map((item,index)=>{
     //     GameMain.players.push({
     //         position:item
@@ -293,9 +402,10 @@ GameMain.tool.forPlayer = function(msg){
             id:'regregr'+i,
             position:positions[i],
             pokerValue:[3,5,14],
-            pokers_ac:[]
+            pokers_ac:[],
+            peopelp:peopelps[i]
         })
     }
-    GameMain.myPlayer = GameMain.players.get('regregr0')
+    GameMain.myPlayer = GameMain.players.get('regregr2')
     // this.players = Zhajinhua.players
 }

@@ -21,7 +21,10 @@ const buttonBg = new Map([
     ['showValue','./res/button/btn-show.png'],
     ['rise','./res/bg/rise-5.png'],
     ['addRise','./res/button/btn-add-rise.png'],
-    ['godd','./res/bg/godd.png']
+    ['godd','./res/bg/godd.png'],
+    ['riseBat','./res/button/btn-rise.png'],
+    ['few','./res/button/out-room.png'],
+    ['gre','./res/button/laba-open.png'],
 ])
 const pokerBg = new Map([])
 // const texture ="./res/bg.jpg";
@@ -37,12 +40,14 @@ const PLAYERSPOSITION_EIGHT = [
 ]
 
 const ACTIONBUTTON = [
-    [25*w/1600,800*h/900,'./res/button/btn-always-add.png'],
-    [210*w/1600,780*h/900,'./res/button/btn-compler.png'],
-    [370*w/1600,780*h/900,'./res/button/btn-getout.png'],
-    [645*w/1600,780*h/900,'./res/button/btn-show.png'],
-    [805*w/1600,780*h/900,'./res/button/btn-add-rise.png'],
-    [970*w/1600,780*h/900,'./res/button/btn-rise.png']
+    [970*w/1600,780*h/900,'./res/button/btn-rise.png',50],
+    [1400*w/1600,10*h/900,'./res/button/laba-open.png',20],
+    [1500*w/1600,10*h/900,'./res/button/out-room.png',20],
+    [25*w/1600,800*h/900,'./res/button/btn-always-add.png',50],
+    [210*w/1600,780*h/900,'./res/button/btn-compler.png',50],
+    [370*w/1600,780*h/900,'./res/button/btn-getout.png',50],
+    [645*w/1600,780*h/900,'./res/button/btn-show.png',50],
+    [805*w/1600,780*h/900,'./res/button/btn-add-rise.png',50]
 ]
 const POKERPOSITION = [
     [290*w/1600,330*h/900],

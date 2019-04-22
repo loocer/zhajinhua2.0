@@ -14,5 +14,5 @@ Laya.stage.scaleMode = Stage.SCALE_SHOWALL;
 Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
 Laya.stage.fullScreenEnabled = true;
 Laya.stage.bgColor = "#fff";
-Laya.stage.scaleMode = Stage.SCALE_FIXED_AUTO
+// Laya.stage.scaleMode = Stage.SCALE_FIXED_AUTO
 GameMain.init();

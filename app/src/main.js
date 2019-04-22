@@ -54,6 +54,13 @@ GameMain.draw.action.event.b3=()=>{
     GameMain.draw.touzhu(obj)
     console.log(1)
 }
+GameMain.draw.action.event.b5=()=>{
+    let obj=GameMain.players.get('regregr3')
+    GameMain.draw.action.qipai(obj)
+    GameMain.draw.action.alertInfo(obj)
+    console.log(1)
+}
+
 GameMain.draw.action.event.b4=()=>{
     let str = `
         <tr style="border-top:1px solid #d8d8d8">
@@ -134,14 +141,61 @@ GameMain.view = ()=>{
         GameMain.draw.action.event.b1,
         GameMain.draw.action.event.b2,
         GameMain.draw.action.event.b3,
-        GameMain.draw.action.event.b4
+        GameMain.draw.action.event.b4,
+        GameMain.draw.action.event.b5,
+        GameMain.draw.action.event.b5,
+        GameMain.draw.action.event.b5,
     ]
     buton.map((item,index)=>{
         console.log(index)
-        GameMain.draw.action.createTool(item[2],events[index],item)
+        GameMain.draw.action.createButtonTool(item[2],events[index],item)
     })
     GameMain.draw.action.fapai()
+    GameMain.draw.roomInfo()
 }
+GameMain.draw.action.alertInfo = (player)=>{
+    let d = dialog({
+	    content: `${player.name}下注20`
+    });
+    d.show();
+    setTimeout(function () {
+        d.close().remove();
+    }, 2000);
+}
+
+GameMain.draw.action.qipai = (player)=>{
+    // if(player.id==GameMain.myPlayer.id){
+    //     player.pokers_ac.map((item)=>{
+    //         Laya.stage.removeChild(item)
+    //     })
+    // }
+    player.pokers_ac.map((item)=>{
+        Laya.stage.removeChild(item)
+    })
+}
+GameMain.draw.roomInfo=()=>{
+    let obj = {
+        text:'房间号：908098',
+        position:[10,10],
+    }
+    let obj1 = {
+        text:'底注：20',
+        position:[w*.6,160],
+    }
+    let obj2 = {
+        text:'封顶：908098',
+        position:[w*.6,170],
+    }
+    let obj3 = {
+        text:'轮数：908098',
+        position:[w*.6,180],
+    }
+    GameMain.draw.action.createTextTool(obj1)
+    GameMain.draw.action.createTextTool(obj2)
+    GameMain.draw.action.createTextTool(obj3)
+    GameMain.draw.action.createTextTool(obj)
+}
+
 GameMain.draw.action.fapai = ()=>{
     const plers = GameMain.players
     const ps = GameMain.players.values()
@@ -200,6 +254,7 @@ GameMain.draw.action.kanpai = (player)=>{
     // if(player.id ==User.id){
     let fd = player
     if(player.id==GameMain.myPlayer.id){
+        console.log(GameMain.myPlayer.id)
         GameMain.myPlayerPokerUrl = []
         const values = player.pokerValue
         for(let v in values){
@@ -288,15 +343,30 @@ GameMain.draw.poen.createBg= (ic)=>{
 GameMain.allplers = ()=>{
     
 }
-GameMain.draw.action.createTool= (skin,Handler,po)=>{
+GameMain.draw.action.createButtonTool= (skin,Handler,po)=>{
     const Button = Laya.Button;
 	let btn = new Button(skin);
     btn.on(Event.CLICK, this, Handler);
-    btn.height=50
-    btn.width=50
+    btn.height=po[3]
+    btn.width=po[3]
     btn.stateNum=1
     btn.pos(po[0],po[1])
 	Laya.stage.addChild(btn);
+}
+GameMain.draw.action.createTextTool= (po)=>{
+   const label = new Laya.Label();
+    label.font = "Microsoft YaHei";
+    label.text = po.text;
+    label.align='left'
+    label.width=60
+    label.id = 'rer'
+    label.pos(po.position[0],po.position[1])
+    label.fontSize = 10;
+    label.color = "#fff";
+    label.stroke = 0.11;
+    label.strokeColor = "#0008ff";
+    Laya.stage.addChild(label);
+    return label
 }
 GameMain.draw.base.onePeople=(position)=>{
     const scb = GameMain.screenMm
@@ -364,6 +434,7 @@ GameMain.tool.forPlayer = function(msg){
     for(let i =0;i<8;i++){
         GameMain.players.set('regregr'+i,{
             id:'regregr'+i,
+            name:'john'+i,
             position:positions[i],
             pokerValue:[3,5,14],
             pokers_ac:[],

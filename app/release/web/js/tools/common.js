@@ -19,7 +19,7 @@ const buttonBg = new Map([
     ['alwAdd','./res/button/btn-always-add.png'],
     ['getOut','./res/button/btn-getout.png'],
     ['showValue','./res/button/btn-show.png'],
-    ['rise','./res/button/btn-rise.png'],
+    ['rise','./res/bg/rise-5.png'],
     ['addRise','./res/button/btn-add-rise.png'],
     ['godd','./res/bg/godd.png']
 ])
@@ -28,8 +28,8 @@ const pokerBg = new Map([])
 const PLAYERSPOSITION_EIGHT = [
     [75*w/1600,145*h/900],
     [75*w/1600,460*h/900],
-    [470*w/1600,580*h/900],
-    [917*w/1600,580*h/900],
+    [470*w/1600,660*h/900],
+    [917*w/1600,640*h/900],
     [1336*w/1600,460*h/900],
     [1336*w/1600,145*h/900],
     [1040*w/1600,40*h/900],
@@ -42,13 +42,15 @@ const ACTIONBUTTON = [
     [370*w/1600,780*h/900,'./res/button/btn-getout.png'],
     [645*w/1600,780*h/900,'./res/button/btn-show.png'],
     [805*w/1600,780*h/900,'./res/button/btn-add-rise.png'],
-    [970*w/1600,780*h/900,'./res/button/btn-rise.png']
+    [970*w/1600,780*h/900,'./res/button/btn-rise.png'],
+    [1550*w/1600,10*h/900,'./res/button/laba-open.png'],
+    [1580*w/1600,10*h/900,'./res/button/out-room.png']
 ]
 const POKERPOSITION = [
     [290*w/1600,330*h/900],
-    [290*w/1600,540*h/900],
-    [500*w/1600,530*h/900],
-    [970*w/1600,530*h/900],
+    [290*w/1600,570*h/900],
+    [500*w/1600,590*h/900],
+    [970*w/1600,570*h/900],
     [1213*w/1600,460*h/900],
     [1230*w/1600,330*h/900],
     [1020*w/1600,300*h/900],
