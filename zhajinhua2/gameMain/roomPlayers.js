@@ -29,7 +29,7 @@ class roomPlayers{
 		this.doingObj = {name:3}
 		this.sendObj = null
 		this.winObj = null
-		this.playIngs = []
+		this.playIngs = new Map()
 		this.num = 1
 		this.numTotal = 4
 		this.players = new Map()

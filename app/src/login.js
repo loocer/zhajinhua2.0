@@ -22,7 +22,6 @@ Login.init = function(){
         ti.fontSize = 30;
         ti.bold = true;
         ti.color = "#606368";
-
         Laya.stage.addChild(ti);
         Login.name = ti
         ti.pos( xs - 100, ys);
@@ -30,7 +29,6 @@ Login.init = function(){
     function createPasswordInput(skin)
     {
         let ti = new Laya.TextInput();
-
         ti.skin = skin;
         ti.size(200, 50);
         ti.sizeGrid = "0,40,0,40";
@@ -63,7 +61,7 @@ Login.network = function(){
     const parm = `name=${this.name.text}&password=${this.password.text}`
     const hr = new HttpRequest();
     hr.once(Event.PROGRESS, this, onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, onHttpRequestComplete);
+    hr.once(Event.COMPLETE, this, Login.onHttpRequestComplete);
     hr.once(Event.ERROR, this, onHttpRequestError);
     hr.send(Adress+'/login', parm, 'post', 'json');
     Login.hr = hr
@@ -92,13 +90,15 @@ function onHttpRequestProgress(e)
     console.log(e);
 }
 
-function onHttpRequestComplete(e)
+Login.onHttpRequestComplete= function(e)
 {   
     const rus = Login.hr.data
     if(rus.status){
+        localStorage.playerId = rus.data.user.id
         User = rus.data.user
         Choise.init()
     }
+    alert(rus.msg)
     console.log(Login.hr.data)
     // logger.text += "收到数据：" + hr.data;
 }

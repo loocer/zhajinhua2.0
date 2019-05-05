@@ -25,6 +25,7 @@ const buttonBg = new Map([
     ['riseBat','./res/button/btn-rise.png'],
     ['few','./res/button/out-room.png'],
     ['gre','./res/button/laba-open.png'],
+    ['xiaolaba','./res/button/xiaolaba.png']
 ])
 const pokerBg = new Map([])
 // const texture ="./res/bg.jpg";
@@ -43,11 +44,12 @@ const ACTIONBUTTON = [
     [970*w/1600,780*h/900,'./res/button/btn-rise.png',50],
     [1400*w/1600,10*h/900,'./res/button/laba-open.png',20],
     [1500*w/1600,10*h/900,'./res/button/out-room.png',20],
-    [25*w/1600,800*h/900,'./res/button/btn-always-add.png',50],
+    [25*w/1600,800*h/900,'./res/button/btn-always-add.png',60,35],
     [210*w/1600,780*h/900,'./res/button/btn-compler.png',50],
     [370*w/1600,780*h/900,'./res/button/btn-getout.png',50],
     [645*w/1600,780*h/900,'./res/button/btn-show.png',50],
-    [805*w/1600,780*h/900,'./res/button/btn-add-rise.png',50]
+    [805*w/1600,780*h/900,'./res/button/btn-add-rise.png',50],
+    [w*.75,h*.9,'./res/button/xiaolaba.png',20,20]
 ]
 const POKERPOSITION = [
     [290*w/1600,330*h/900],
@@ -75,16 +77,14 @@ const statusType = {
 	'ON_RAISE':'投注',
 }
 const getPositions=(psNum)=>{
-    console.log(psNum)
     if(psNum>6){
         return PLAYERSPOSITION_EIGHT
     } 
     if(psNum>4){
          return PLAYERSPOSITION_SIX
     }else{
-        console.log(PLAYERSPOSITION_SIX)
         return PLAYERSPOSITION_FOUR
     }
 }
-const Adress = "http://localhost:8080/api"
+const Adress = "api"
 const fontColor = "#ececec"

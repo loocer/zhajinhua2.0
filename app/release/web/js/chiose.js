@@ -9,7 +9,7 @@ Choise.view = function(){
     btn1.width = 500
     btn1.height = 80
     btn1.labelSize = 50
-    btn1.pos( wh - 250, vh );
+    btn1.pos( wh - 250, vh -100 );
     btn1.on(Laya.Event.CLICK, this,createClick);
     function createClick(){
         CreateRoom.init()
@@ -20,7 +20,7 @@ Choise.view = function(){
     btn2.width = 500
     btn2.height = 80
     btn2.labelSize = 50
-    btn2.pos( wh - 250, vh + 200);
+    btn2.pos( wh - 250, vh);
     btn2.on(Laya.Event.CLICK, this,comeClick);
     function comeClick(){
         ComeRoom.init()

@@ -65,6 +65,7 @@ ComeRoom.Event.onHttpRequestComplete = function(e)
 {   
     const rus = ComeRoom.hr.data
     if(rus.status){
+        localStorage.roomNo=rus.data.roomNo
         GameMain.roomInfo = rus.data
         GameMain.init()
     }

@@ -2,6 +2,8 @@ var imgObj = Laya.Image;
 // var dif = [texture,plerBg]
 var GameMain = {
     roomInfo:'',
+    service:{},
+    socketAddress:{},
     pokerImg:new Map(),
     players:new Map(),
     tool:{},
@@ -21,7 +23,86 @@ var GameMain = {
     // paics:dif,
     picNum:0
 }
+GameMain.service.getSocketAdress = function(){
+    const hr = new HttpRequest();
+    hr.once(Event.PROGRESS, this, GameMain.socketAddress.onHttpRequestProgress);
+    hr.once(Event.COMPLETE, this, GameMain.socketAddress.onHttpRequestComplete);
+    hr.once(Event.ERROR, this, GameMain.socketAddress.onHttpRequestErrorError);
+    hr.send(Adress+'/get-socketAddress', null, 'get', 'json');
+    GameMain.socketAddress.hr = hr
+}
+GameMain.socketAddress.onHttpRequestError = function(e)
+{
+    console.log(e);
+}
+
+GameMain.socketAddress.onHttpRequestProgress = function(e)
+{
+    console.log(e);
+}
+
+GameMain.socketAddress.onHttpRequestComplete = function(e)
+{   
+    const rus = GameMain.socketAddress.hr.data
+    if(rus.status){
+        GameMain.network(rus.data)
+    }
+    console.log(rus)
+    // logger.text += "收到数据：" + hr.data;
+}
+GameMain.network = function(url){
+    const Event  = Laya.Event;
+	const Byte   = Laya.Byte;
+    GameMain.socket = io.connect(url);
+    GameMain.socket.emit(GameMain.roomInfo.roomNo, msg);
+    GameMain.socket.on(GameMain.roomInfo.roomNo, function(msg){
+        console.log(msg)
+        Laya.stage.destroyChildren()
+        GameMain.tool.forPlayer(msg)
+        // const ps = GameMain.players
+        // let p = null
+        // for(let i in ps){
+        //     if(ps[i].user.id == msg.backObj.playerId){
+        //         p= ps[i];
+        //     }
+        // }
+        // if(msg.backObj.acType === 'ON_COME'){
+        //     Zhajinhua.view(msg)
+        // }
+        // if(msg.backObj.acType === 'ON_READY'){
+        //     Zhajinhua.view(msg)
+        // }
+        // if(msg.backObj.acType === 'SHOW_VALUE'){
+        //     Zhajinhua.view(msg)
+        //     Zhajinhua.Draw.showValue(p)
+        // }
+        // if(msg.backObj.acType === 'ON_RAISE'){
+        //     Zhajinhua.view(msg)
+        //     Zhajinhua.Draw.touzhu(p)
+        // }
+        // if(msg.backObj.acType === 'ON_START'){
+        //     Zhajinhua.view(msg)
+        //     Zhajinhua.Draw.fapai()
+        // }
+        // if(msg.backObj.acType === 'GAME_PASS'){
+        //    Zhajinhua.Draw.onPass(msg)
+        //     Zhajinhua.view(msg)
+        // }
+        // if(msg.backObj.acType === 'GAME_PK'){
+        //     Zhajinhua.Draw.pkAc(msg)
+        //     Zhajinhua.view(msg)
+        // }
+        // if(msg.backObj.acType === 'GAME_OVER'){
+        //     Zhajinhua.tool.setDongPlers([])
+        //     Zhajinhua.view(msg)
+        //     Zhajinhua.Draw.over(msg)
+        // }
+    })
+    
+}
 GameMain.init = function(){
+    Laya.stage.scaleMode = Stage.SCALE_SHOWALL;
+    Laya.stage.screenMode = Stage.SCREEN_HORIZONTAL;
     GameMain.tool.initImg()
     GameMain.tool.forPlayer()
     Laya.loader.load([
@@ -37,10 +118,18 @@ GameMain.init.player = function(){
 GameMain.graphicsImg = function(){
         // Zhajinhua.service.getSocketAdress()
     GameMain.view()
-    
 }
 GameMain.draw.action.event.b1=()=>{
     let obj=GameMain.players.get('regregr1')
+    let msg = { 
+        acType: 'ON_COME',
+        roomId: Zhajinhua.roomInfo.roomNo,
+        playerId:User.id,
+        playerRoom:Zhajinhua.positions,
+        raiseMoney:1
+    }
+    msg.acType = 'ON_START'
+    GameMain.socket.emit(GameMain.roomInfo.roomNo, msg);
     GameMain.draw.action.kanpai(obj)
     console.log(1)
 }
@@ -57,6 +146,7 @@ GameMain.draw.action.event.b3=()=>{
 GameMain.draw.action.event.b5=()=>{
     let obj=GameMain.players.get('regregr3')
     GameMain.draw.action.qipai(obj)
+    GameMain.draw.action.alertInfo(obj)
     console.log(1)
 }
 
@@ -85,10 +175,11 @@ GameMain.draw.action.event.b4=()=>{
         stred+=str
     }
     var d = dialog({
+        skin: 'results-dialog',
         width: '100%',
         title: '游戏结果',
         content: `
-        <div style="background:#131111;height:300px;overflow-y :scroll;color:#fff"> 
+        <div style="background:#131111;height:300px;width:300px;overflow-y :scroll;color:#fff"> 
         <table border="0" cellspacing="0">
         <tr style="background:#d8d8d8">
             <th style="width:150px;text-align: center;">玩家</th>
@@ -144,14 +235,29 @@ GameMain.view = ()=>{
         GameMain.draw.action.event.b5,
         GameMain.draw.action.event.b5,
         GameMain.draw.action.event.b5,
+        GameMain.draw.action.event.b5
     ]
     buton.map((item,index)=>{
         console.log(index)
-        GameMain.draw.action.createTool(item[2],events[index],item)
+        GameMain.draw.action.createButtonTool(item[2],events[index],item)
     })
     GameMain.draw.action.fapai()
     GameMain.draw.roomInfo()
+    GameMain.draw.roomMsg()
 }
+GameMain.draw.action.alertInfo = (player)=>{
+    let d = dialog({
+        skin: 'msg-dialog',
+	    content: `<div style="text-align: center;width:160px">
+        ${player.name}下注20
+        </div>`
+    });
+    d.show();
+    setTimeout(function () {
+        d.close().remove();
+    }, 1000);
+}
+
 GameMain.draw.action.qipai = (player)=>{
     // if(player.id==GameMain.myPlayer.id){
     //     player.pokers_ac.map((item)=>{
@@ -163,18 +269,35 @@ GameMain.draw.action.qipai = (player)=>{
     })
 }
 GameMain.draw.roomInfo=()=>{
-    const label = new Laya.Label();
-    label.font = "Microsoft YaHei";
-    label.text = '房间号：908098';
-    label.align='center'
-    label.width=70
-    label.id = 'rer'
-    label.pos(10,10)
-    label.fontSize = 10;
-    label.color = "#fff";
-    label.stroke = 0.11;
-    label.strokeColor = "#0008ff";
-    Laya.stage.addChild(label);
+    let obj = {
+        text:'房间号：908098',
+        position:[10,10],
+    }
+    let obj1 = {
+        text:'底注：20',
+        position:[w*.6,160],
+    }
+    let obj2 = {
+        text:'封顶：908098',
+        position:[w*.6,170],
+    }
+    let obj3 = {
+        text:'轮数：908098',
+        position:[w*.6,180],
+    }
+    GameMain.draw.action.createTextTool(obj1)
+    GameMain.draw.action.createTextTool(obj2)
+    GameMain.draw.action.createTextTool(obj3)
+    GameMain.draw.action.createTextTool(obj)
+}
+GameMain.draw.roomMsg=()=>{
+    for(let i = 0;i<4;i++){
+        let obj = {
+            text:'房间号：玩家‘隔热个人’与玩家‘电饭锅仍’比牌！',
+            position:[w*.8,h*.85+10*i],
+        }
+        GameMain.draw.action.createMsgTool(obj)
+    }
 }
 
 GameMain.draw.action.fapai = ()=>{
@@ -306,6 +429,20 @@ GameMain.draw.poen.createMoney = (money)=>{
     label.strokeColor = "#0008ff";
     return label
 }
+GameMain.draw.poen.createStatus = (status=true)=>{
+    const label = new Laya.Label();
+    label.font = "Microsoft YaHei";
+    label.text = '。';
+    label.align='left'
+    label.width=5
+    label.id = 'rer'
+    label.pos(0,-30)
+    label.fontSize = 50;
+    label.color = status?"#44cb00":"#c7c7c7";
+    label.stroke = 0.1;
+    label.strokeColor = "#0008ff";
+    return label
+}
 GameMain.draw.poen.createImcon= (texture)=>{
     let imcon = new imgObj(texture);
     imcon.width=10
@@ -324,15 +461,43 @@ GameMain.draw.poen.createBg= (ic)=>{
 GameMain.allplers = ()=>{
     
 }
-GameMain.draw.action.createTool= (skin,Handler,po)=>{
+GameMain.draw.action.createButtonTool= (skin,Handler,po)=>{
     const Button = Laya.Button;
 	let btn = new Button(skin);
     btn.on(Event.CLICK, this, Handler);
-    btn.height=50
-    btn.width=50
+    btn.height=po[4]||po[3]
+    btn.width=po[3]
     btn.stateNum=1
     btn.pos(po[0],po[1])
 	Laya.stage.addChild(btn);
+}
+GameMain.draw.action.createTextTool= (po)=>{
+   const label = new Laya.Label();
+    label.font = "Microsoft YaHei";
+    label.text = po.text;
+    label.align='left'
+    label.width=60
+    label.id = 'rer'
+    label.pos(po.position[0],po.position[1])
+    label.fontSize = 10;
+    label.color = "#fff";
+    label.stroke = 0.11;
+    label.strokeColor = "#0008ff";
+    Laya.stage.addChild(label);
+    return label
+}
+GameMain.draw.action.createMsgTool= (obj)=>{
+    const Text = Laya.Text;
+    let text = new Text();
+    Laya.stage.addChild(text);
+    text.overflow = Text.HIDDEN;
+    text.width = 150;
+    text.color = "#898989";
+    text.font = "Impact";
+    text.fontSize = 10;
+    text.pos(obj.position[0],obj.position[1])
+    text.text = obj.text;
+    return text;
 }
 GameMain.draw.base.onePeople=(position)=>{
     const scb = GameMain.screenMm
@@ -342,6 +507,7 @@ GameMain.draw.base.onePeople=(position)=>{
     let label = temp.createNikeName('joke.fd')
     let money = temp.createMoney(100)
     let imcon = temp.createImcon(picdsd[0])
+    let status = temp.createStatus()
     const  panel = new Laya.Panel();
     panel.width=60;
     panel.height=60;
@@ -352,6 +518,7 @@ GameMain.draw.base.onePeople=(position)=>{
     panel.addChild(img)
     panel.addChild(money)
     panel.addChild(imcon)
+    panel.addChild(status)
     Laya.stage.addChild(panel)
 }
 GameMain.draw.touzhu = function(ps){
@@ -400,6 +567,7 @@ GameMain.tool.forPlayer = function(msg){
     for(let i =0;i<8;i++){
         GameMain.players.set('regregr'+i,{
             id:'regregr'+i,
+            name:'john'+i,
             position:positions[i],
             pokerValue:[3,5,14],
             pokers_ac:[],

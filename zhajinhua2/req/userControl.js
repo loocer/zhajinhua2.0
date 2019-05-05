@@ -15,6 +15,45 @@ const acType = {
 }
 var filter = require('./tools/filter')
 userControl.getUserInfo=function(app){
+  app.get('/get-userInfo',filter.authorize,function(req,res){
+    let results = {}
+    let user = req.query
+    console.log(user)
+    const users = demoData.users
+    let flag = false
+    for(var u in users){
+      console.log(user.id)
+      console.log(users[u].id)
+      if(users[u].id === user.id){
+        user = users[u]
+        results.status = 1
+        results.data = {user:user}
+        results.msg = '获取成功！'
+        res.status(200)
+        res.json(results)
+      }
+    }
+  })
+}
+userControl.getRoomStatus=function(app){
+  app.get('/get-roomStatus',filter.authorize,function(req,res){
+    let results = {}
+    let roomNo = req.query.roomNo
+    const users = demoData.users
+    if(rooms.size!=0&&rooms.has(roomNo)){
+      results.status = 1
+      results.msg = '正在进行！'
+      res.status(200)
+      res.json(results)
+    }else{
+      results.status = 0
+      results.msg = '已经结束！'
+      res.status(200)
+      res.json(results)
+    }
+  })
+}
+userControl.createRoom=function(app){
   app.get('/create-room',filter.authorize,function(req,res){
     let results = {}
     let roomNo = String(req.query.roomNo)
