@@ -58,13 +58,31 @@ Login.init = function(){
     console.log(Laya.stage)
 }   
 Login.network = function(){
-    const parm = `name=${this.name.text}&password=${this.password.text}`
-    const hr = new HttpRequest();
-    hr.once(Event.PROGRESS, this, onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, Login.onHttpRequestComplete);
-    hr.once(Event.ERROR, this, onHttpRequestError);
-    hr.send(Adress+'/login', parm, 'post', 'json');
-    Login.hr = hr
+    // const parm = `name=${this.name.text}&password=${this.password.text}`
+    // const hr = new HttpRequest();
+    // hr.once(Event.PROGRESS, this, onHttpRequestProgress);
+    // hr.once(Event.COMPLETE, this, Login.onHttpRequestComplete);
+    // hr.once(Event.ERROR, this, onHttpRequestError);
+    // hr.send(Adress+'/login', parm, 'post', 'json');
+    // Login.hr = hr
+    let name = this.name.text
+    let password = this.password.text
+    service({
+	    url: Adress+'/login',
+	    method: 'post',
+	    data: {
+            name,
+            password
+        }
+	}).then((data)=>{
+        if(data.status){
+            setToken(data.data.user.token)
+            localStorage.playerId = data.data.user.id
+            User = data.data.user
+            Choise.init()
+        }
+        console.log(data)
+    })
 }
 function showLogger()
 {

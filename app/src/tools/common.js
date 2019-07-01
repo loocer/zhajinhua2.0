@@ -86,5 +86,11 @@ const getPositions=(psNum)=>{
         return PLAYERSPOSITION_FOUR
     }
 }
-const Adress = "api"
+const getToken =()=>{
+    return localStorage.token
+}
+const setToken =(token)=>{
+    return localStorage.token = token
+}
+const Adress = "http://172.16.24.87:3000"
 const fontColor = "#ececec"

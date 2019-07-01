@@ -1,12 +1,13 @@
 var imgObj = Laya.Image;
 // var dif = [texture,plerBg]
-var GameMain = {
-    roomInfo:'',
+const GameMain = {
+    roomInfo:null,
     service:{},
     socketAddress:{},
     pokerImg:new Map(),
     players:new Map(),
     tool:{},
+    msg:{},
     myPlayer:null,
     draw:{
         base:{},
@@ -24,12 +25,22 @@ var GameMain = {
     picNum:0
 }
 GameMain.service.getSocketAdress = function(){
-    const hr = new HttpRequest();
-    hr.once(Event.PROGRESS, this, GameMain.socketAddress.onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, GameMain.socketAddress.onHttpRequestComplete);
-    hr.once(Event.ERROR, this, GameMain.socketAddress.onHttpRequestErrorError);
-    hr.send(Adress+'/get-socketAddress', null, 'get', 'json');
-    GameMain.socketAddress.hr = hr
+    // const hr = new HttpRequest();
+    // hr.once(Event.PROGRESS, this, GameMain.socketAddress.onHttpRequestProgress);
+    // hr.once(Event.COMPLETE, this, GameMain.socketAddress.onHttpRequestComplete);
+    // hr.once(Event.ERROR, this, GameMain.socketAddress.onHttpRequestErrorError);
+    // hr.send(Adress+'/get-socketAddress', null, 'get', 'json');
+    // GameMain.socketAddress.hr = hr
+
+    service({
+	    url: Adress+'/get-socketAddress',
+	    method: 'get'
+	}).then((data)=>{
+        if(data.status){
+            GameMain.network(data.data)
+        }
+        console.log(data)
+    })
 }
 GameMain.socketAddress.onHttpRequestError = function(e)
 {
@@ -53,12 +64,20 @@ GameMain.socketAddress.onHttpRequestComplete = function(e)
 GameMain.network = function(url){
     const Event  = Laya.Event;
 	const Byte   = Laya.Byte;
+    const msg = { 
+        acType: 'ON_COME',
+        roomId: GameMain.roomInfo.roomNo,
+        playerId:User.id,
+        playerRoom:GameMain.positions,
+        raiseMoney:1
+    }
     GameMain.socket = io.connect(url);
     GameMain.socket.emit(GameMain.roomInfo.roomNo, msg);
     GameMain.socket.on(GameMain.roomInfo.roomNo, function(msg){
         console.log(msg)
         Laya.stage.destroyChildren()
         GameMain.tool.forPlayer(msg)
+        GameMain.view()
         // const ps = GameMain.players
         // let p = null
         // for(let i in ps){
@@ -116,8 +135,8 @@ GameMain.init.player = function(){
 
 }
 GameMain.graphicsImg = function(){
-        // Zhajinhua.service.getSocketAdress()
-    GameMain.view()
+    GameMain.service.getSocketAdress()
+    // GameMain.view()
 }
 GameMain.draw.action.event.b1=()=>{
     let obj=GameMain.players.get('regregr1')

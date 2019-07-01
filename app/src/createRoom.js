@@ -39,14 +39,29 @@ CreateRoom.view = function(){
     }
 }
 CreateRoom.network = function(roomNo,peopleNum){
-    const parm = `roomNo=${roomNo}&peopleNum=${peopleNum}`
-    const hr = new HttpRequest();
-    hr.once(Event.PROGRESS, this, CreateRoom.Event.onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, CreateRoom.Event.onHttpRequestComplete);
-    hr.once(Event.ERROR, this, CreateRoom.Event.onHttpRequestErrorError);
-    console.log(parm)
-    hr.send(Adress+'/create-room?'+parm, null, 'get', 'json');
-    CreateRoom.hr = hr
+    // const parm = `roomNo=${roomNo}&peopleNum=${peopleNum}`
+    // const hr = new HttpRequest();
+    // hr.once(Event.PROGRESS, this, CreateRoom.Event.onHttpRequestProgress);
+    // hr.once(Event.COMPLETE, this, CreateRoom.Event.onHttpRequestComplete);
+    // hr.once(Event.ERROR, this, CreateRoom.Event.onHttpRequestErrorError);
+    // console.log(parm)
+    // hr.send(Adress+'/create-room?'+parm, null, 'get', 'json');
+    // CreateRoom.hr = hr
+    service({
+	    url: Adress+'/create-room',
+	    method: 'get',
+	    params: {
+            roomNo,
+            peopleNum
+        }
+	}).then((data)=>{
+        if(data.status){
+            localStorage.roomNo=data.data.roomNo
+            GameMain.roomInfo = data.data
+            GameMain.init()
+        }
+        console.log(data)
+    })
 }
 CreateRoom.Event.onHttpRequestError = function(e)
 {

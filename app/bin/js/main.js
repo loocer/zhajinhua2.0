@@ -1,12 +1,13 @@
 var imgObj = Laya.Image;
 // var dif = [texture,plerBg]
-var GameMain = {
-    roomInfo:'',
+const GameMain = {
+    roomInfo:null,
     service:{},
     socketAddress:{},
     pokerImg:new Map(),
     players:new Map(),
     tool:{},
+    msg:{},
     myPlayer:null,
     draw:{
         base:{},
@@ -53,6 +54,13 @@ GameMain.socketAddress.onHttpRequestComplete = function(e)
 GameMain.network = function(url){
     const Event  = Laya.Event;
 	const Byte   = Laya.Byte;
+    const msg = { 
+        acType: 'ON_COME',
+        roomId: GameMain.roomInfo.roomNo,
+        playerId:User.id,
+        playerRoom:GameMain.positions,
+        raiseMoney:1
+    }
     GameMain.socket = io.connect(url);
     GameMain.socket.emit(GameMain.roomInfo.roomNo, msg);
     GameMain.socket.on(GameMain.roomInfo.roomNo, function(msg){
@@ -116,8 +124,8 @@ GameMain.init.player = function(){
 
 }
 GameMain.graphicsImg = function(){
-        // Zhajinhua.service.getSocketAdress()
-    GameMain.view()
+    GameMain.service.getSocketAdress()
+    // GameMain.view()
 }
 GameMain.draw.action.event.b1=()=>{
     let obj=GameMain.players.get('regregr1')

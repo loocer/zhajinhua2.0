@@ -20,13 +20,28 @@ const roomNo = localStorage.roomNo
 
 const InitData = {}
 InitData.getUserInfo = function(playerId){
-    const parm = `id=${playerId}`
-    const hr = new HttpRequest();
-    hr.once(Event.PROGRESS, this, onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, InitData.onHttpRequestComplete);
-    hr.once(Event.ERROR, this, onHttpRequestError);
-    hr.send(Adress+`/get-userInfo?${parm}`,null, 'get', 'json');
-    InitData.hr = hr
+    // const parm = `id=${playerId}`
+    // const hr = new HttpRequest();
+    // hr.once(Event.PROGRESS, this, onHttpRequestProgress);
+    // hr.once(Event.COMPLETE, this, InitData.onHttpRequestComplete);
+    // hr.once(Event.ERROR, this, onHttpRequestError);
+    // hr.send(Adress+`/get-userInfo?${parm}`,null, 'get', 'json');
+    // InitData.hr = hr
+    service({
+	    url: Adress+'/get-userInfo',
+	    method: 'get',
+	    params: {
+            id:playerId
+        }
+	}).then((data)=>{
+        if(data.status){
+            setToken(data.data.user.token)
+            localStorage.playerId = data.data.user.id
+            User = data.data.user
+            Choise.init()
+        }
+        console.log(data)
+    })
 }
 function onHttpRequestError(e)
 {
@@ -48,17 +63,29 @@ InitData.onHttpRequestComplete=function(e)
     }else{
         Login.init()
     }
-    console.log(Login.hr.data)
+    // console.log(Login.hr.data)
     // logger.text += "收到数据：" + hr.data;
 }
 function getRoomStatus(playerId){
-    const parm = `roomNo=${playerId}`
-    const hr = new HttpRequest();
-    hr.once(Event.PROGRESS, this, onHttpRequestProgress);
-    hr.once(Event.COMPLETE, this, InitData.onHttpRequestCompleteer);
-    hr.once(Event.ERROR, this, onHttpRequestError);
-    hr.send(Adress+`/get-roomStatus?${parm}`, null, 'get', 'json');
-    InitData.hr = hr
+    // const parm = `roomNo=${playerId}`
+    // const hr = new HttpRequest();
+    // hr.once(Event.PROGRESS, this, onHttpRequestProgress);
+    // hr.once(Event.COMPLETE, this, InitData.onHttpRequestCompleteer);
+    // hr.once(Event.ERROR, this, onHttpRequestError);
+    // hr.send(Adress+`/get-roomStatus?${parm}`, null, 'get', 'json');
+    // InitData.hr = hr
+    service({
+	    url: Adress+'/get-roomStatus',
+	    method: 'get',
+	    params: {
+            roomNo:playerId
+        }
+	}).then((data)=>{
+        if(data.status){
+             GameMain.init()
+        }
+        console.log(data)
+    })
 }
 InitData.onHttpRequestCompleteer=function(e)
 {   
@@ -66,8 +93,8 @@ InitData.onHttpRequestCompleteer=function(e)
     if(rus.status){
         GameMain.init()
     }
-    alert(rus.msg)
-    console.log(Login.hr.data)
+    // alert(rus.msg)
+    // console.log(Login.hr.data)
     // logger.text += "收到数据：" + hr.data;
 }
 if(playerId){

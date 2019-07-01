@@ -48,7 +48,7 @@ InitData.onHttpRequestComplete=function(e)
     }else{
         Login.init()
     }
-    console.log(Login.hr.data)
+    // console.log(Login.hr.data)
     // logger.text += "收到数据：" + hr.data;
 }
 function getRoomStatus(playerId){
@@ -66,8 +66,8 @@ InitData.onHttpRequestCompleteer=function(e)
     if(rus.status){
         GameMain.init()
     }
-    alert(rus.msg)
-    console.log(Login.hr.data)
+    // alert(rus.msg)
+    // console.log(Login.hr.data)
     // logger.text += "收到数据：" + hr.data;
 }
 if(playerId){

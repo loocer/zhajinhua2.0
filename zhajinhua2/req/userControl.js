@@ -1,6 +1,7 @@
 var demoData = require('./tools/demoData')
 var userControl={};
 var rooms=require('../gameMain/rooms');
+const getAuthorize = require('./tools/auth').getAuthorize;
 var RoomPlayers = require('../gameMain/roomPlayers');
 var ZhajinhuaPlayer=require('../gameMain/player');
 const acType = {
@@ -13,7 +14,8 @@ const acType = {
   ON_RAISE: 'ON_RAISE',
   ADD_RAISE: 'ADD_RAISE'
 }
-var filter = require('./tools/filter')
+const filter = require('./tools/filter')
+const auth = require('./tools/auth').authorize
 userControl.getUserInfo=function(app){
   app.get('/get-userInfo',filter.authorize,function(req,res){
     let results = {}
@@ -56,12 +58,15 @@ userControl.getRoomStatus=function(app){
 userControl.createRoom=function(app){
   app.get('/create-room',filter.authorize,function(req,res){
     let results = {}
+    console.log(req.session)
     let roomNo = String(req.query.roomNo)
     let peopleNum = req.query.peopleNum
     const detaRooms = demoData.rooms
+    let reUser = getAuthorize(req.headers.authorization)
     console.log(roomNo)
     console.log(detaRooms)
-    console.log(rooms)
+    console.log(reUser)
+     console.log('-=-=------------------')
    	/*--------判断房卡是否有效--------*/
    	// console.log(req)
     let status = detaRooms.has(roomNo)
@@ -86,7 +91,7 @@ userControl.createRoom=function(app){
         //------------------------------------//
         let user = null
         for(var u in  demoData.users){
-          if(demoData.users[u].id === req.session.user_id){
+          if(demoData.users[u].id === reUser.id){
             user = demoData.users[u]
           }
         }
@@ -100,7 +105,7 @@ userControl.createRoom=function(app){
         roomPlayers.playIngs.set(player.id,player)
         roomPlayers.fangzhu = player
         // console.log(roomPlayers)
-        results.data = {roomNo:roomNo,peopleNum:peopleNum,userId:req.session.user_id}
+        results.data = {roomNo:roomNo,peopleNum:peopleNum,userId:user.id}
         results.msg = '房间创建成功！'
         res.status(200),
         res.json(results)
@@ -164,6 +169,7 @@ userControl.addPlaytoRoom=function(app){
 }
 userControl.login=function(app){
   app.post('/login',function(req,res){
+    console.log('-------------------------------------------==============')
     let results = {}
     var user = req.body
     var users = demoData.users
@@ -179,6 +185,7 @@ userControl.login=function(app){
       }
     }
     if(statusCode ===1){
+      user.token = auth(user)
       req.session.user_id = user.id
       results.status = 1
       results.msg = '创建成功！'
